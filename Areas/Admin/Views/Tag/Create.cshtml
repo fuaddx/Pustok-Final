@@ -1,0 +1,18 @@
+﻿@model CreateTagVm;
+
+<div class="card shadow mb-4">
+    <div class="card-header py-3">
+        <h6 class="m-0 font-weight-bold text-primary">Create Tag</h6>
+    </div>
+    <div class="card-body">
+        <form asp-action="Create" method="post">
+            <div class="form-group">
+                <label asp-for="Title"></label>
+                <input asp-for="Title" class="form-control">
+                <span asp-validation-for="Title" class="text-danger"></span>
+            </div>
+            <button class="btn btn-success">Create</button>
+            <a asp-controller="Tag" asp-action="Cancel" class="btn btn-close" style="background:red;color:white">Cancel</a>
+        </form>
+    </div>
+</div>

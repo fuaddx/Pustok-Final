@@ -1,0 +1,48 @@
+﻿@model BloglistCreateVm
+@{
+    ViewData["Title"] = "Create";
+}
+<div class="card shadow mb-4">
+    <div class="card-header py-3">
+        <h6 class="m-0 font-weight-bold text-primary">Create Blog</h6>
+    </div>
+    <div class="card-body">
+        <form asp-action="Create" method="post">
+            
+            <div class="form-group">
+                <label asp-for="Title"></label>
+                <input asp-for="Title" class="form-control">
+                <span asp-validation-for="Title" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Description"></label>
+                <input asp-for="Description" class="form-control">
+                <span asp-validation-for="Description" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Author">Authors</label>
+                <select class="form-control" asp-for="AuthorId" asp-items='@new SelectList(ViewBag.Author, "Id" , "Name","Surname")'>
+                    <option disabled selected>Select Author</option>
+                </select>
+                <span asp-validation-for="Author" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="TagsId">Tags</label>
+                <select class="form-control" asp-for="TagsId" asp-items='@ViewBag.Tags'>
+                    <option disabled selected >Select Tags</option>
+                </select>
+                <span asp-validation-for="TagsId" class="text-danger"></span>
+            </div>
+
+
+            <button class="btn btn-success">Create</button>
+            <a asp-controller="Blog" asp-action="Cancel" class="btn btn-close" style="background:red;color:white">Cancel</a>
+
+
+        </form>
+    </div>
+</div>
+
+@* asp-items='@new SelectList(ViewBag.Author, "Id" , "Name")' *@
+

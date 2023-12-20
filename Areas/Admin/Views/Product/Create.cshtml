@@ -1,0 +1,97 @@
+﻿@model ProductCreateVM
+@{
+    ViewData["Title"] = "Create";
+}
+<style>
+    .salam ul li {
+        /* list-style:none !important; */
+        display: block;
+        margin: 2.5px 0;
+    }
+
+    .salam ul {
+        padding: 0;
+    }
+</style>
+<div class="card shadow mb-4">
+    <div class="card-header py-3">
+        <h6 class="m-0 font-weight-bold text-primary">Create Product Details</h6>
+    </div>
+    <div class="card-body">
+        <form asp-action="Create" method="post" enctype="multipart/form-data">
+            <div class="form-group">    
+                <label asp-for="Name"></label>
+                <input asp-for="Name" class="form-control">
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="SellPrice"></label>
+                <input asp-for="SellPrice" class="form-control">
+                <span asp-validation-for="SellPrice" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="CostPrice"></label>
+                <input asp-for="CostPrice" class="form-control">
+                <span asp-validation-for="CostPrice" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Discount"></label>
+                <input asp-for="Discount" class="form-control">
+                <span asp-validation-for="Discount" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Quantity"></label>
+                <input asp-for="Quantity" class="form-control">
+                <span asp-validation-for="Quantity" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ProductCode"></label>
+                <input asp-for="ProductCode" class="form-control">
+                <span asp-validation-for="ProductCode" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="MainImage"></label>
+                <input asp-for="MainImage" accept="image/*" class="form-control">
+                <span asp-validation-for="MainImage" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="HoverImage"></label>
+                <input asp-for="HoverImage" accept="image/*" class="form-control">
+                <span asp-validation-for="HoverImage" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Images"></label>
+                <input asp-for="Images" accept="image/*" class="form-control">
+                <div class="text-danger" asp-validation-summary=ModelOnly></div>
+            </div>
+            <div class="form-group">
+                <label asp-for="About"></label>
+                <textarea asp-for="About" class="form-control"></textarea>
+                <span asp-validation-for="About" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Description"></label>
+                <textarea asp-for="Description" class="form-control"></textarea>
+                <span asp-validation-for="Description" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="CategoryId">Categories</label>
+                <select class="form-control" asp-for="CategoryId" asp-items='@new SelectList(ViewBag.Categories, "Id" , "Name")'>
+                    <option disabled selected>Select category</option>
+                </select>
+                <span asp-validation-for="CategoryId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ColorIds">Colors</label>
+                <select class="form-control" asp-for="ColorIds" asp-items='@ViewBag.Colors'>
+                    <option disabled selected>Select Color</option>
+                </select>
+                <span asp-validation-for="ColorIds" class="text-danger"></span>
+            </div>
+            <button class="btn btn-success">Create</button>
+            <a asp-controller="Product" asp-action="Cancel" class="btn btn-close" style="background:red;color:white">Cancel</a>
+        </form>
+    </div>
+</div>
+
+

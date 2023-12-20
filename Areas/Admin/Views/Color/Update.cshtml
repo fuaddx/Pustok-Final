@@ -1,0 +1,27 @@
+﻿@model ColorUpdateVm
+@{
+    ViewData["Title"] = "Update";
+}
+
+<div class="card shadow mb-4">
+    <div class="card-header py-3">
+        <h6 class="m-0 font-weight-bold text-primary">Update Color</h6>
+    </div>
+    <div class="card-body">
+        <form asp-action="Update" method="post">
+            <div class="form-group">
+                <label asp-for="Name"></label>
+                <input asp-for="Name" class="form-control">
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="HexCode"></label>
+                <input asp-for="HexCode" type="color" class="form-control">
+                <span asp-validation-for="HexCode" class="text-danger"></span>
+            </div>
+            <button class="btn btn-success">Uptade</button>
+            <a asp-controller="Color" asp-action="Cancel" class="btn btn-close" style="background:red;color:white">Cancel</a>
+        </form>
+    </div>
+</div>
+

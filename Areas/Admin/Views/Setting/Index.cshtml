@@ -1,0 +1,75 @@
+﻿@model IEnumerable<SettingListVm>;
+@{
+    ViewData["Title"] = "Index";
+}
+@section scripts {
+    <script src="~/admin/js/demo/datatables-demo.js"></script>
+    @if (TempData["Response"] != null)
+    {
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+        @if ((bool)TempData["Response"] == true)
+        {
+            <script>
+                Swal.fire({
+                    position: "top-end",
+                    icon: "success",
+                    title: "Data Created",
+                    showConfirmButton: false,
+                    timer: 1500
+                });
+            </script>
+        }
+        else
+        {
+            <script>
+                Swal.fire({
+                    position: "top-end",
+                    icon: "error",
+                    title: "Something went wrong",
+                    showConfirmButton: false,
+                    timer: 1500
+                });
+            </script>
+        }
+    }
+}
+<div class="card shadow mb-4">
+    <div class="card-header py-3">
+        <h6 class="m-0 font-weight-bold text-primary">Setting</h6>
+    </div>
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                <thead>
+                <th>Logo</th>
+                <th>Address</th>
+                <th>Number</th>
+                <th>Email</th>
+                <th style="text-align:center">Action</th>
+                </thead>
+                <tbody>
+                    @if (Model != null)
+                    {
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+                                <td>@item.Logo</td>
+                                <td>@item.Address</td>
+                                <td>@item.Number</td>
+                                <td>@item.Email</td>
+                                <td class="text-center"><a class="btn btn-outline-info" asp-action="Update" asp-route-id="@item.Id">Update</a></td>
+                            </tr>
+                        }
+                    }
+                    else
+                    {
+                        <tr>
+                            <td class="text-center" colspan="10">No data</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+

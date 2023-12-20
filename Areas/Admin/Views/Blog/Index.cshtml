@@ -1,0 +1,51 @@
+﻿@model IEnumerable<BlogListVM>
+@{
+    ViewData["Title"] = "Blog";
+}
+<div class="card shadow mb-4">
+    <div class="card-header py-3">
+        <h6 class="m-0 font-weight-bold text-primary">Blog</h6>
+        <a asp-action="Create" class="btn btn-outline-success">Create</a>
+    </div>
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                <thead>
+                <th>Title</th>
+                <th>Description</th>
+                <th>CreatedAt</th>
+                <th>UpdatedAt</th>
+                <th>Author</th>
+                <td>Tags</td>
+                <th colspan="2" style="text-align:center">Action</th>
+                </thead>
+                <tbody>
+                    @if (Model != null)
+                    {
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+                                <td>@item.Title</td>
+                                <td>@item.Description</td>
+                                <td>@item.CreatedAt</td>
+                                <td>@(item.UptadedAt != null ? item.UptadedAt.ToString() : "No Update")</td>
+                                <td>@item.Author.Name</td>
+                                <td>
+                                    @string.Join(',',item.Tags.Select(i=>i.Title))
+                                </td>
+                                <td class="text-center"><a class="btn btn-outline-info" asp-action="Update" asp-route-id="@item.Id">Update</a></td>
+                                <td class="text-center"><a class="btn btn-outline-danger" asp-action="Delete" asp-route-id="@item.Id">Delete</a></td>
+                            </tr>
+                        }
+                    }
+                    else
+                    {
+                        <tr>
+                            <td class="text-center" colspan="4">No data</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
