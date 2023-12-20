@@ -64,9 +64,13 @@ namespace Pustok2.Controllers
 			return View();
 		}
 		[HttpPost]
-		public async Task<IActionResult> Login(LoginVm vm)
+		public async Task<IActionResult> Login(string? returnUrl,LoginVm vm)
 		{
 			AppUser user;
+			if(!ModelState.IsValid)
+			{
+				return View();
+			}
 			if (vm.UsernameOrEmail.Contains("@"))
 			{
 				user = await _userManager.FindByEmailAsync(vm.UsernameOrEmail);
@@ -88,8 +92,11 @@ namespace Pustok2.Controllers
 				}
 				return View(vm);
 			}
+			if (returnUrl != null)
+			{
+					return LocalRedirect(returnUrl);
+			}
 
-			 
 			return RedirectToAction("Index", "Home");
 
 		}
@@ -118,9 +125,6 @@ namespace Pustok2.Controllers
 			return true;
 		}
 
-		public IActionResult UserPage()
-		{
-			return View();
-		}
+		
     }
 }

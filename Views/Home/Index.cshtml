@@ -38,6 +38,7 @@
 
         $("body").on("click", ".cross-btn", function (ev) {
             ev.preventDefault();
+            $(this).closest('.single-cart-block').remove();
             fetch($(this).attr("href"))
                 .then(res => {
                     if (res.ok) {

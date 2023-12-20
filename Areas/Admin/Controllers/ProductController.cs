@@ -8,10 +8,12 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 
 using Pustok2.Migrations;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Pustok2.ViewModel.ProductVM
 {
     [Area("Admin")]
+    [Authorize(Roles = "SuperAdmin,Admin,Moderator")]
     public class ProductController : Controller
     {
        PustokDbContext _db { get; }
@@ -22,7 +24,7 @@ namespace Pustok2.ViewModel.ProductVM
             _db = db;
             _env = env;
         }
-
+        
         public IActionResult Index()
         {
 

@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Pustok2.Contexts;
@@ -9,6 +10,7 @@ using Pustok2.ViewModel.CommonVM;
 namespace Pustok2.Areas.Admin.Controllers
 {
     [Area("Admin")]
+    [Authorize(Roles = "SuperAdmin,Admin,Moderator")]
     public class AuthorController : Controller
     {
         PustokDbContext _db { get; }

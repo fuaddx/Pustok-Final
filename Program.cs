@@ -32,7 +32,17 @@ internal class Program
 		{
 			options.LoginPath = new PathString("/Auth/Login");
 			options.LogoutPath = new PathString("/Auth/Logout");
-		});
+            options.AccessDeniedPath = new PathString("/Home/AccessDenied");
+            options.Cookie = new()
+            {
+                Name = "IdentityCookie",
+                HttpOnly = true,
+                SameSite = SameSiteMode.Lax,
+                SecurePolicy = CookieSecurePolicy.Always
+            };
+            options.SlidingExpiration = true;
+            options.ExpireTimeSpan = TimeSpan.FromDays(30);
+        });
 
 		builder.Services.AddSession();
         // ne vaxt Pustok istesem konstruktorda New la ver mene 

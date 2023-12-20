@@ -5,10 +5,12 @@ using Pustok2.ViewModel.BlogVM;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Pustok2.Models;
 using Pustok2.Helpers;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Pustok2.Areas.Admin.Controllers
 {
     [Area("Admin")]
+    [Authorize(Roles = "SuperAdmin,Admin,Moderator")]
     public class BlogController : Controller
     {
         PustokDbContext _db { get; }
