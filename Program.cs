@@ -21,7 +21,7 @@ internal class Program
 			options.UseSqlServer(builder.Configuration["ConnectionStrings:MSSql"]);
 		}).AddIdentity<AppUser, IdentityRole>(opt =>
 		{
-			opt.SignIn.RequireConfirmedEmail = false;
+			opt.SignIn.RequireConfirmedEmail = true;
 			opt.User.RequireUniqueEmail = true;
 			opt.User.AllowedUserNameCharacters = "abcdefghijklmnopqrstuvwxyz0123456789._";
 			opt.Lockout.MaxFailedAccessAttempts = 5;
@@ -49,6 +49,7 @@ internal class Program
         // ne vaxt Pustok istesem konstruktorda New la ver mene 
 
         builder.Services.AddScoped<IEmailService, EmailService>();
+
         builder.Services.AddScoped<LayoutService>();
         var app = builder.Build();
 

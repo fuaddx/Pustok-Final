@@ -47,11 +47,19 @@
 									<h4 class="login-title">New Customer</h4>
 									<p><span class="font-weight-bold">I am a new customer</span></p>
 									<div class="row">
-										<div class="form-group">
+										@* <div class="form-group">
 											<input class="form-control form-control-user" placeholder="Fullname" asp-for="Fullname">
 											<span class="text-danger" asp-validation-for="Fullname"></span>
-										</div>
-										<div class="form-group">
+										</div> *@
+									<div class="form-group">
+										<input class="form-control form-control-user" placeholder="FirstName" asp-for="Fisrtname">
+										<span class="text-danger" asp-validation-for="Fisrtname"></span>
+									</div> 
+									<div class="form-group">
+										<input class="form-control form-control-user" placeholder="Last Name" asp-for="Lastname">
+										<span class="text-danger" asp-validation-for="Lastname"></span>
+									</div>
+									<div class="form-group">
 											<input class="form-control form-control-user" placeholder="Email" asp-for="Email">
 											<span class="text-danger" asp-validation-for="Email"></span>
 										</div>

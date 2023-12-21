@@ -5,7 +5,9 @@ namespace Pustok2.Models
 {
     public class AppUser: IdentityUser
     {
-		public string Fullname { get; set; }
+		public string FullName { get; set; }
+		public string FirstName { get; set; }
+		public string LastName { get; set; }
 		public string? ProfileImageUrl { get; set; }
 		[NotMapped]
 		public override string PhoneNumber { get => base.PhoneNumber; set => base.PhoneNumber = value; }

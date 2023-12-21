@@ -215,7 +215,6 @@
 													<span asp-validation-for="Surname" class="text-danger"></span>
 												</div>
 												
-												@* Elave olunub *@
 												<div class="col-lg-6 col-12  mb--30">
 													<input asp-for="Username" placeholder="Last Name" type="text">
 													<span asp-validation-for="Username" class="text-danger"></span>
@@ -226,27 +225,24 @@
 													<span asp-validation-for="Email" class="text-danger"></span>
 												</div>
 												<div class="col-12  mb--30">
-													@* <input type="hidden" asp-for="ProfileImageURL" /> *@
-													@* <img width="90" src="~/@Model.ProfileImageURL" /> *@
-													@* <span asp-validation-for="ProfileImageURL" class="text-danger"></span> *@
-													<input asp-for="ProfileImage" accept="image/*">
-													<span asp-validation-for="ProfileImage" class="text-danger"></span>
+													@* <input asp-for="ProfileImage" accept="image/*">
+													<span asp-validation-for="ProfileImage" class="text-danger"></span> *@
+															
+																<input type="hidden" asp-for="ProfileImageURL" />
+																<img width="90" src="@Model.ProfileImage" />
+																<span asp-validation-for="ProfileImageURL" class="text-danger"></span>
+																<label asp-for="ProfileImage"></label>
+															<input asp-for="ProfileImage" accept="image/*" class="form-control">
+															<span asp-validation-for="ProfileImage" class="text-danger"></span>	
 												</div>
-												@* <div class="col-12  mb--30">
-													<h4>Password change</h4>
-												</div>
-												<div class="col-12  mb--30">
-													<input id="current-pwd" placeholder="Current Password"
-														   type="password">
-												</div>
-												<div class="col-lg-6 col-12  mb--30">
-													<input id="new-pwd" placeholder="New Password"
-														   type="password">
-												</div>
-												<div class="col-lg-6 col-12  mb--30">
-													<input id="confirm-pwd" placeholder="Confirm Password"
-														   type="password">
-												</div> *@
+													<div class="col-12  mb--30">
+														<input class="form-control form-control-user" placeholder="Password" asp-for="Password">
+														<span class="text-danger" asp-validation-for="Password"></span>
+													</div>
+														<div class="col-12  mb--30">
+														<input class="form-control form-control-user" placeholder="ConfirmPassword" asp-for="ConfirmPassword">
+														<span class="text-danger" asp-validation-for="ConfirmPassword"></span>
+													</div>
 												<div class="col-12">
 													<button type="submit" class="btn btn--primary">Save Changes</button>
 												</div>

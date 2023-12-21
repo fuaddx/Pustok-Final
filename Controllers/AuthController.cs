@@ -28,9 +28,13 @@ namespace Pustok2.Controllers
             _userManager = userManager;
             _roleManager = roleManager;
             _emailService = emailService;
-            /*_emailService = emailService;*/
         }
         
+		public IActionResult SendMail()
+		{
+			_emailService.Send("fuad.flash.2002@gmail.com", "Salam", "Bu bir testdir");
+			return Ok();
+		}
         public IActionResult Register()
 		{
 			return View();
@@ -44,7 +48,8 @@ namespace Pustok2.Controllers
 			}
 			var user = new AppUser
 			{
-				Fullname = vm.Fullname,
+				FirstName = vm.Fisrtname,
+				LastName = vm.Lastname,
 				Email = vm.Email,
 				UserName = vm.Username
 			};
@@ -65,11 +70,41 @@ namespace Pustok2.Controllers
 				return View(vm);
 			}
 			//Mail gonderir
-            /*using StreamReader reader = new StreamReader(Path.Combine(PathConstants.RootPath, "htmlpage.html"));
+			/*using StreamReader reader = new StreamReader(Path.Combine(PathConstants.RootPath, "htmlpage.html"));
             string template = reader.ReadToEnd();
             _emailService.Send("", "Salam", template);*/
-			return View(vm);
+
+			await _sendConfirmation(user);
+			return View();
         }
+
+        //Send
+        public async Task<IActionResult>SendConfirmationEmail(string username)
+		{
+			await _sendConfirmation(await _userManager.FindByNameAsync(username));
+
+            return Content("Email Sent!");
+        }
+
+       
+        async Task _sendConfirmation(AppUser user)
+		{
+            var token = await _userManager.GenerateEmailConfirmationTokenAsync(user);
+            var link = Url.Action("EmailConfirmed", "Auth", new
+            {
+                token = token,
+                username = user.UserName
+            }, Request.Scheme);
+            _emailService.Send(user.Email, "Confirmation Email", $"<a href='{link}'>Confirm Email</a>");
+        }
+		//Confirm  
+
+		public async Task<IActionResult>EmailConfirmed(string token,string username)
+		{
+			var result = await _userManager.ConfirmEmailAsync(await _userManager.FindByNameAsync(username),token);
+			if (result.Succeeded) return Ok();
+			return Problem();
+		}
 
 		public IActionResult Login()
 		{
@@ -97,6 +132,15 @@ namespace Pustok2.Controllers
 				if (result.IsLockedOut)
 				{
 					ModelState.AddModelError("", "Too many attempts wait until " + DateTime.Parse(user.LockoutEnd.ToString()).ToString("HH:mm"));
+				}
+				else if (!user.EmailConfirmed)
+				{
+					var param = new
+					{
+						username = user.UserName
+					};
+
+					ViewBag.Link = $"Go to <a href='{Url.Action("SendConfirmationEmail", "Auth", param)}'> confirm</a>";
 				}
 				else
 				{

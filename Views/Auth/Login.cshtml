@@ -66,6 +66,10 @@
 												Me
 											</label>
 										</div>
+										@if (ViewBag.Link != null && ViewBag.Link.Length > 0)
+										{
+											<span class="text-danger">@Html.Raw(ViewBag.Link)</span>
+										}
 									</div>
 									<div class="col-md-12">
 										<div class="text-danger" asp-validation-summary="ModelOnly"></div>

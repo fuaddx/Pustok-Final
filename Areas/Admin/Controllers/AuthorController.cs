@@ -10,8 +10,9 @@ using Pustok2.ViewModel.CommonVM;
 namespace Pustok2.Areas.Admin.Controllers
 {
     [Area("Admin")]
-    [Authorize(Roles = "SuperAdmin,Admin,Moderator")]
-    public class AuthorController : Controller
+	/*[Authorize(Roles = "SuperAdmin,Admin,Moderator")]*/
+	[Authorize]
+	public class AuthorController : Controller
     {
         PustokDbContext _db { get; }
 

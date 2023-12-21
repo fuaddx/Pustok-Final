@@ -19,7 +19,7 @@ namespace Pustok2.ViewModel.ProductVM
         public ushort Quantity { get; set; }
         public string? ProductCode { get; set; }
         public int CategoryId { get; set; }
-        public IEnumerable<int> ColorIds { get; set; }
+        public List<int> ColorIds { get; set; } = new();
         public IFormFile? MainImage { get; set; }
         public IEnumerable<IFormFile>? Images { get; set; }
         public IEnumerable<ProductImgVm>? ImageUrls { get; set; } = new List<ProductImgVm>();

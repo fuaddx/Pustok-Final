@@ -13,8 +13,9 @@ using Microsoft.AspNetCore.Authorization;
 namespace Pustok2.ViewModel.ProductVM
 {
     [Area("Admin")]
-    [Authorize(Roles = "SuperAdmin,Admin,Moderator")]
-    public class ProductController : Controller
+	/*[Authorize(Roles = "SuperAdmin,Admin,Moderator")]*/
+	[Authorize]
+	public class ProductController : Controller
     {
        PustokDbContext _db { get; }
         IWebHostEnvironment _env { get; }
@@ -170,7 +171,7 @@ namespace Pustok2.ViewModel.ProductVM
                 
                 About = data.About,
                 CategoryId = data.CategoryId,
-                ColorIds = data.ProductColors?.Select(i => i.ColorId),
+                ColorIds = data.ProductColors?.Select(i => i.ColorId).ToList(),
                 CostPrice = data.CostPrice,
                 Description = data.Description,
                 Discount = data.Discount,

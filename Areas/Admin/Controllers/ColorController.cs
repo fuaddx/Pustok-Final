@@ -9,7 +9,9 @@ using Pustok2.ViewModel.ColorVM;
 namespace Pustok2.Areas.Admin.Controllers
 {
     [Area("Admin")]
-    [Authorize(Roles = "SuperAdmin,Admin,Moderator")]
+    /* [Authorize(Roles = "SuperAdmin,Admin,Moderator")]*/
+
+    [Authorize]
     public class ColorController : Controller
     {
         PustokDbContext _db { get; }

@@ -10,8 +10,9 @@ using Microsoft.AspNetCore.Authorization;
 namespace Pustok2.Areas.Admin.Controllers
 {
     [Area("Admin")]
-    [Authorize(Roles = "SuperAdmin,Admin,Moderator")]
-    public class BlogController : Controller
+	/*[Authorize(Roles = "SuperAdmin,Admin,Moderator")]*/
+	[Authorize]
+	public class BlogController : Controller
     {
         PustokDbContext _db { get; }
         public BlogController(PustokDbContext db)

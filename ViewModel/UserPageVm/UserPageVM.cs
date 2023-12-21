@@ -11,7 +11,11 @@ namespace Pustok2.ViewModel.UserPageVm
 		public string Surname { get; set; }
 		[DataType(DataType.EmailAddress)]
 		public string Email { get; set; }
-		public string? ProfileImageURL { get; set; }
+		[Required, DataType(DataType.Password), Compare(nameof(ConfirmPassword)), RegularExpression("^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9]).{4,}$", ErrorMessage = "Wrong input for password")]
+		public string Password { get; set; }
+		[Required, DataType(DataType.Password), RegularExpression("^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9]).{4,}$", ErrorMessage = "Wrong input for password")]
+		public string ConfirmPassword { get; set; }
+		public string ProfileImageURL { get; set; }
 		public IFormFile? ProfileImage { get; set; }
 	}
 }

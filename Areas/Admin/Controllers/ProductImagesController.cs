@@ -6,13 +6,15 @@ using Pustok2.Helpers;
 using Pustok2.Models;
 using Pustok2.ViewModel.ProductImagesVm;
 using Pustok2.ViewModel.ProductVM;
+using Pustok2.ViewModel.SettingVm;
 
 namespace Pustok2.Areas.Admin.Controllers
 {
 
     [Area("Admin")]
-    [Authorize(Roles = "SuperAdmin,Admin,Moderator")]
-    public class ProductImagesController : Controller
+	/*[Authorize(Roles = "SuperAdmin,Admin,Moderator")]*/
+	[Authorize]
+	public class ProductImagesController : Controller
     {
         PustokDbContext _db { get; }
         IWebHostEnvironment _env { get; }
@@ -67,5 +69,38 @@ namespace Pustok2.Areas.Admin.Controllers
 
             return RedirectToAction(nameof(Index));
         }
-    }
+		public async Task<IActionResult> Update(int? id)
+		{
+			if (id == null || id <= 0) return BadRequest();
+			var data = await _db.ProductImages.FindAsync(id);
+			if (data == null) return NotFound();
+			return View(new ProductImagesListVm
+			{
+				Id = data.Id,
+				ImagePath = data.ImagePath,
+				IsActive = data.IsActive,
+				Product = data.Product
+			});
+		}
+		[HttpPost]
+        public async Task<IActionResult> Update(int? id, ProductImagesListVm vm)
+        {
+            if (id == null || id <= 0) return BadRequest();
+            if (!ModelState.IsValid)
+            {
+                return View(vm);
+
+            }
+            var data = await _db.ProductImages.FindAsync(id);
+            if (data == null) return NotFound();
+
+            data.Id = vm.Id;
+            data.ImagePath = vm.ImagePath;
+            data.IsActive = vm.IsActive;
+            data.Product = vm.Product;
+			await _db.SaveChangesAsync();
+			TempData["Salam"] = true;
+			return RedirectToAction(nameof(Index));
+		}
+		}
 }

@@ -30,8 +30,10 @@ namespace Pustok2.Controllers
 			{
 				Username = userr.UserName,
 				Email = userr.Email,
-				Name = userr.Fullname,
-				Surname = userr.Fullname,
+				Name = userr.FirstName,
+				Surname = userr.LastName,
+				Password = userr.PasswordHash,
+				ConfirmPassword= userr.PasswordHash,
 				ProfileImageURL = userr.ProfileImageUrl,
 			};
 			return View(UserVm);
@@ -116,7 +118,6 @@ namespace Pustok2.Controllers
 			if (userr == null) return NotFound();
 			if (!ModelState.IsValid)
 			{
-				// View adi yazmamisdin, gedib UserPages.cshtml axtarirdi "Index" yazdm cunki sende Index.cshtml di
 				return View("Index",vm);
 			}
 			if(vm.ProfileImage != null)
@@ -132,6 +133,12 @@ namespace Pustok2.Controllers
 
 				
 			}
+			userr.FirstName = vm.Name;
+			userr.LastName = vm.Surname;
+			userr.Email = vm.Email;
+			userr.PasswordHash = vm.Password;
+			userr.PasswordHash = vm.ConfirmPassword;
+			userr.ProfileImageUrl = vm.ProfileImageURL;
 			if (vm.ProfileImage != null)
 			{
 				string filePath = Path.Combine(PathConstants.RootPath, userr.ProfileImageUrl);
@@ -145,12 +152,10 @@ namespace Pustok2.Controllers
 				//Yeni sekli save elemek
 			}
 
-			userr.Fullname = vm.Name + " " + vm.Surname;
-			userr.Email = vm.Email;
-
+			
 			await _userManager.UpdateAsync(userr);
 
-			// burdada Indexe redirect elemek lazimdi, sende UserPages actionunu deyisdim Indexnen cunki view adin uygun gelmirdi
+		
 			return RedirectToAction(nameof(Index));
 			}
 	}
