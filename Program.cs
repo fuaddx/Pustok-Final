@@ -1,6 +1,8 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Pustok2.Contexts;
+using Pustok2.ExternalServices.Inplements;
+using Pustok2.ExternalServices.Interfaces;
 using Pustok2.Helpers;
 using Pustok2.Models;
 
@@ -43,10 +45,10 @@ internal class Program
             options.SlidingExpiration = true;
             options.ExpireTimeSpan = TimeSpan.FromDays(30);
         });
-
 		builder.Services.AddSession();
         // ne vaxt Pustok istesem konstruktorda New la ver mene 
 
+        builder.Services.AddScoped<IEmailService, EmailService>();
         builder.Services.AddScoped<LayoutService>();
         var app = builder.Build();
 

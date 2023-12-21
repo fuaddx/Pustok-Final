@@ -6,6 +6,8 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Authorization;
+using Pustok2.ExternalServices.Interfaces;
+using Pustok2.ExternalServices.Inplements;
 
 namespace Pustok2.Controllers
 {
@@ -15,16 +17,21 @@ namespace Pustok2.Controllers
         SignInManager<AppUser> _signInManager { get; }
         UserManager<AppUser> _userManager { get; }
         RoleManager<IdentityRole> _roleManager { get; }
+		IEmailService _emailService { get; }
 
         public AuthController(SignInManager<AppUser> signInManager,
             UserManager<AppUser> userManager,
-            RoleManager<IdentityRole> roleManager)
+            RoleManager<IdentityRole> roleManager,
+            IEmailService emailService)
         {
             _signInManager = signInManager;
             _userManager = userManager;
             _roleManager = roleManager;
+            _emailService = emailService;
+            /*_emailService = emailService;*/
         }
-		public IActionResult Register()
+        
+        public IActionResult Register()
 		{
 			return View();
 		}
@@ -57,8 +64,13 @@ namespace Pustok2.Controllers
 				ModelState.AddModelError("", "Something went wrong. Please contact admin");
 				return View(vm);
 			}
-			return View();
-		}
+			//Mail gonderir
+            /*using StreamReader reader = new StreamReader(Path.Combine(PathConstants.RootPath, "htmlpage.html"));
+            string template = reader.ReadToEnd();
+            _emailService.Send("", "Salam", template);*/
+			return View(vm);
+        }
+
 		public IActionResult Login()
 		{
 			return View();
@@ -126,5 +138,6 @@ namespace Pustok2.Controllers
 		}
 
 		
+	
     }
 }

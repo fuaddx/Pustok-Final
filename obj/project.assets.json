@@ -8168,19 +8168,19 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\ASUS\\.nuget\\packages\\": {}
+    "C:\\Users\\Birinci\\.nuget\\packages\\": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\ASUS\\Desktop\\hbhb2\\Pustok2.csproj",
+      "projectUniqueName": "C:\\Users\\Birinci\\Desktop\\User-Account\\Pustok2.csproj",
       "projectName": "Pustok2",
-      "projectPath": "C:\\Users\\ASUS\\Desktop\\hbhb2\\Pustok2.csproj",
-      "packagesPath": "C:\\Users\\ASUS\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\ASUS\\Desktop\\hbhb2\\obj\\",
+      "projectPath": "C:\\Users\\Birinci\\Desktop\\User-Account\\Pustok2.csproj",
+      "packagesPath": "C:\\Users\\Birinci\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\Birinci\\Desktop\\User-Account\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
-        "C:\\Users\\ASUS\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\Birinci\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [
