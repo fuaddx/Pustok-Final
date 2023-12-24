@@ -9,7 +9,7 @@ namespace Pustok2.Areas.Admin.Controllers
 {
      [Area("Admin")]
 	/* [Authorize(Roles = "SuperAdmin,Admin,Moderator")]*/
-	[Authorize]
+	//[Authorize]
 	public class SliderController : Controller
     {
         PustokDbContext _db { get; }
@@ -71,19 +71,7 @@ namespace Pustok2.Areas.Admin.Controllers
             TempData["Created"] = true;
             return RedirectToAction(nameof(Index));
         }
-        public async Task<IActionResult> Delete(int? id) 
-        {
-            TempData["Response"] = false;
-            if (id == null) return BadRequest();
-            
-            var data = await _db.Sliders.FindAsync(id);
-            if(data == null)return NotFound();            
-            _db.Sliders.Remove(data);
-            await _db.SaveChangesAsync();
-            TempData["Response"] = true; 
-            return RedirectToAction(nameof(Index));
-
-        }
+        
         //Update Part
         public async Task<IActionResult> Update(int? id)
         {
@@ -149,5 +137,19 @@ namespace Pustok2.Areas.Admin.Controllers
             return RedirectToAction(nameof(Index));
 
         }
+        public async Task<IActionResult> Delete(int? id)
+        {
+            TempData["Response"] = false;
+            if (id == null) return BadRequest();
+
+            var data = await _db.Sliders.FindAsync(id);
+            if (data == null) return NotFound();
+            _db.Sliders.Remove(data);
+            await _db.SaveChangesAsync();
+            TempData["Response"] = true;
+            return RedirectToAction(nameof(Index));
+
+        }
+
     }
 }

@@ -94,6 +94,10 @@ namespace Pustok2.Areas.Admin.Controllers
                 ViewBag.Tags = new SelectList(_db.Tags.ToList(), "Id", "Title");
                 return View(vm);
             }
+            if(!vm.TagsId.Any())
+            {
+                ModelState.AddModelError("TagsId", "You must select at least 1 Tag");
+            }
             var data = await _db.Blogs
                 .Include(p => p.BlogTag)
                 .SingleOrDefaultAsync(p => p.Id == id);
@@ -101,6 +105,10 @@ namespace Pustok2.Areas.Admin.Controllers
             data.Description = vm.Description;
             data.Author = vm.Author;
             data.AuthorId = vm.AuthorId;
+            if (!Enumerable.SequenceEqual(data.BlogTag?.Select(p => p.TagId), vm.TagsId))
+            {
+                data.BlogTag = vm.TagsId.Select(c => new BlogTag { TagId = c, BlogId = data.Id }).ToList();
+            }
             await _db.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }

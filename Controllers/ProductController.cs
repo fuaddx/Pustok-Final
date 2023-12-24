@@ -16,10 +16,21 @@ namespace Pustok2.Controllers
         {
             _db = db;
         }
-        public IActionResult Index()
+        public async Task<IActionResult> Index(string? q,List<int>? catIds,List<int>? tagIds)
         {
+            var queries = HttpContext.Request.Query;
+            ViewBag.Categories = _db.Categories.Include(c=>c.Products);
+            ViewBag.Tags = _db.Tags;
             return View();
         }
+        /*[HttpPost]
+        public async Task<IActionResult> Index(string? q,List<int>? catIds, )
+        {
+            ViewBag.Categories = _db.Categories.Include(c => c.Products);
+            ViewBag.ProductCount = await _db.Products.CountAsync();
+            ViewBag.Tags = _db.Tags;
+            return View();
+        }*/
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null || id <= 0) return BadRequest();
@@ -68,7 +79,7 @@ namespace Pustok2.Controllers
             if (!await _db.Products.AnyAsync(p => p.Id == id)) return NotFound();
             var dasket = JsonConvert.DeserializeObject<List<BasketProductAndCountVM>>(HttpContext.Request.Cookies["basket"] ?? "[]");
             var existItem = dasket.Find(b => b.Id == id);
-            if (existItem == null)
+            if (existItem.Count == 1)
             {
                 dasket.Remove(new BasketProductAndCountVM()
                 {

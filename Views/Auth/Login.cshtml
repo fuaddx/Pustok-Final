@@ -66,7 +66,7 @@
 												Me
 											</label>
 										</div>
-										@if (ViewBag.Link != null && ViewBag.Link.Length > 0)
+										@if (ViewBag.Link != null && ViewBag.Link.Length !=null)
 										{
 											<span class="text-danger">@Html.Raw(ViewBag.Link)</span>
 										}

@@ -6,6 +6,7 @@
         public string Title { get; set; }
 
         public IEnumerable<BlogTag>? TagBlog { get; set; }
+        public IEnumerable<ProductTag> TagProduct { get; set; }
     }
 }
         

@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Authorization;
 using Pustok2.ExternalServices.Interfaces;
 using Pustok2.ExternalServices.Inplements;
+using NuGet.Common;
 
 namespace Pustok2.Controllers
 {
@@ -32,7 +33,7 @@ namespace Pustok2.Controllers
         
 		public IActionResult SendMail()
 		{
-			_emailService.Send("fuad.flash.2002@gmail.com", "Salam", "Bu bir testdir");
+			_emailService.Send("", "Salam", "Bu bir testdir");
 			return Ok();
 		}
         public IActionResult Register()
@@ -70,9 +71,15 @@ namespace Pustok2.Controllers
 				return View(vm);
 			}
 			//Mail gonderir
-			/*using StreamReader reader = new StreamReader(Path.Combine(PathConstants.RootPath, "htmlpage.html"));
-            string template = reader.ReadToEnd();
-            _emailService.Send("", "Salam", template);*/
+           
+           
+            var token = await _userManager.GenerateEmailConfirmationTokenAsync(user);
+            var link = Url.Action("EmailConfirmed", "Auth", new
+            {
+                token = token,
+                username = user.UserName
+            }, Request.Scheme);
+			
 
 			await _sendConfirmation(user);
 			return View();
@@ -91,11 +98,15 @@ namespace Pustok2.Controllers
 		{
             var token = await _userManager.GenerateEmailConfirmationTokenAsync(user);
             var link = Url.Action("EmailConfirmed", "Auth", new
-            {
+            {	
                 token = token,
                 username = user.UserName
             }, Request.Scheme);
-            _emailService.Send(user.Email, "Confirmation Email", $"<a href='{link}'>Confirm Email</a>");
+            using StreamReader reader = new StreamReader(Path.Combine(PathConstants.RootPath, "htmlpage.html"));
+			string template = reader.ReadToEnd();
+            template.Replace("[username]", user.UserName);
+			template = template.Replace("[[[link]]]", link);
+            _emailService.Send(user.Email, "Confirmation Email", template);
         }
 		//Confirm  
 

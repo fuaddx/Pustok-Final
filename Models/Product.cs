@@ -26,4 +26,5 @@ public class Product
     public bool IsDeleted { get; set; } = false;
     public ICollection<ProductColor>? ProductColors { get; set; }
 	public List<ProductImages> ProductImages { get; set; }
+    public IEnumerable<ProductTag> TagProduct { get; set; }
 }

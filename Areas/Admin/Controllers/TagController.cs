@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
@@ -87,5 +88,7 @@ namespace Pustok2.Areas.Admin.Controllers
             await _pustokDbContext.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
+
+       
     }
 }

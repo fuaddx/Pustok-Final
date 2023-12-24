@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
+using Pustok2.Models;
 
 namespace Pustok2.ViewModel.ProductVM
 {
@@ -15,5 +16,7 @@ namespace Pustok2.ViewModel.ProductVM
         public string? ProductCode { get; set; }
         public int CategoryId { get; set; }
         public bool IsDeleted { get; set; } = false;
+        public IEnumerable<Tag>? Tags { get; set; }
+       
     }
 }

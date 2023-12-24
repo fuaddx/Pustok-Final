@@ -10,6 +10,6 @@ namespace Pustok2.ViewModel.BlogVM
         public Author? Author { get; set; }
         public int AuthorId { get; set; }
         public List<Tag>? Tags { get; set; }
-        public IEnumerable<int>? TagsId { get; set; }
+        public IEnumerable<int> TagsId { get; set; }
     }
 }

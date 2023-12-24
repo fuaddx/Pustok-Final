@@ -30,9 +30,15 @@
                                 <td>@item.CreatedAt</td>
                                 <td>@(item.UptadedAt != null ? item.UptadedAt.ToString() : "No Update")</td>
                                 <td>@item.Author.Name</td>
-                                <td>
-                                    @string.Join(',',item.Tags.Select(i=>i.Title))
-                                </td>
+
+                                 @if (item.Tags == null || item.Tags.Count() == 0)
+                                 {
+                                        <td>No Tags</td>
+                                 }
+                                 else
+                                 {
+                                     <td>@string.Join(',', item.Tags.Select(i => i.Title))</td>
+                                 }
                                 <td class="text-center"><a class="btn btn-outline-info" asp-action="Update" asp-route-id="@item.Id">Update</a></td>
                                 <td class="text-center"><a class="btn btn-outline-danger" asp-action="Delete" asp-route-id="@item.Id">Delete</a></td>
                             </tr>

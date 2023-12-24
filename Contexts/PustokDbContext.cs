@@ -18,6 +18,7 @@ namespace Pustok2.Contexts
         public DbSet<ProductColor> ProductColors { get; set; }
         public DbSet<Tag> Tags { get; set; }
         public DbSet<BlogTag> BlogsTags { get; set; }
+        public DbSet<ProductTag> ProductTags { get; set; }
         public DbSet<Setting> Settings { get; set; }
         public DbSet<AppUser> AppUsers { get; set; }
         public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
@@ -28,7 +29,7 @@ namespace Pustok2.Contexts
             {
                 if (entry.State == EntityState.Added)
                 {
-                   DateTime utcTime = DateTime.UtcNow;
+                    DateTime utcTime = DateTime.UtcNow;
                     DateTime azTime = utcTime.AddHours(4);//GMT+4
                     entry.Entity.CreatedAt = azTime;
                     entry.Entity.UptadedAt = null; // Set to null for newly added entities

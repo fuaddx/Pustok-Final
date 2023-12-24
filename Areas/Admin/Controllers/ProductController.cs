@@ -44,13 +44,16 @@ namespace Pustok2.ViewModel.ProductVM
                 IsDeleted = p.IsDeleted,
                 Quantity = p.Quantity,
                 SellPrice = p.SellPrice,
-                Colors = p.ProductColors.Select(p => p.Color)
+                Colors = p.ProductColors.Select(p => p.Color),
+                Tags = p.TagProduct.Select(p=>p.Tag)
+                
             }));
         }
         public IActionResult Create()
         {
             ViewBag.Categories = _db.Categories;
             ViewBag.Colors = new SelectList(_db.Color, "Id", "Name");
+            ViewBag.Tags = new SelectList(_db.Tags, "Id", "Title");
             return View();
         }
         public IActionResult Cancel()
@@ -105,6 +108,7 @@ namespace Pustok2.ViewModel.ProductVM
             {
                 ViewBag.Categories = _db.Categories;
                 ViewBag.Colors = new SelectList(_db.Color, "Id", "Name");
+                ViewBag.Tags = new SelectList(_db.Tags, "Id", "Title");
                 return View(vm);
             }
             if (!await _db.Categories.AnyAsync(c => c.Id == vm.CategoryId))
@@ -112,12 +116,21 @@ namespace Pustok2.ViewModel.ProductVM
                 ModelState.AddModelError("CategoryId", "Category doesnt exist");
                 ViewBag.Categories = _db.Categories;
                 ViewBag.Colors = new SelectList(_db.Color, "Id", "Name");
+                ViewBag.Tags = new SelectList(_db.Tags, "Id", "Title");
                 return View(vm);
             }
             if (await _db.Color.Where(c => vm.ColorIds.Contains(c.Id)).Select(c => c.Id).CountAsync() != vm.ColorIds.Count())
             {
                 ModelState.AddModelError("ColorIds", "Color doesnt exist");
                 ViewBag.Categories = _db.Categories;
+                ViewBag.Tags = new SelectList(_db.Tags, "Id", "Title");
+                ViewBag.Colors = new SelectList(_db.Color, "Id", "Name");
+                return View(vm);
+            }
+            if(await _db.Tags.Where(c=> vm.TagsId.Contains(c.Id)).Select(c=>c.Id).CountAsync()!= vm.TagsId.Count()){
+                ModelState.AddModelError("TagsId", "TagsId doesnt exist");
+                ViewBag.Categories = _db.Categories;
+                ViewBag.Tags = new SelectList(_db.Tags, "Id", "Title");
                 ViewBag.Colors = new SelectList(_db.Color, "Id", "Name");
                 return View(vm);
             }
@@ -132,7 +145,7 @@ namespace Pustok2.ViewModel.ProductVM
                 ImageUrl = await vm.MainImage.SaveAsync(PathConstants.Product),
                 CostPrice = vm.CostPrice,
                 SellPrice = vm.SellPrice,
-                UrlImage2= await vm.HoverImage.SaveAsync(PathConstants.Product),
+                UrlImage2 = await vm.HoverImage.SaveAsync(PathConstants.Product),
                 CategoryId = vm.CategoryId,
                 ProductColors = vm.ColorIds.Select(id => new ProductColor
                 {
@@ -141,6 +154,10 @@ namespace Pustok2.ViewModel.ProductVM
                 ProductImages = vm.Images.Select(i => new ProductImages
                 {
                     ImagePath = i.SaveAsync(PathConstants.Product).Result
+                }).ToList(),
+                TagProduct = vm.TagsId.Select(id => new ProductTag
+                {
+                    TagId = id,
                 }).ToList()
             };
 
@@ -156,13 +173,12 @@ namespace Pustok2.ViewModel.ProductVM
             if (id == null || id <= 0) return BadRequest();
             ViewBag.Colors = new SelectList(_db.Color, "Id", "Name");
             ViewBag.Categories = _db.Categories;
+            ViewBag.Tags = new SelectList(_db.Tags, "Id", "Title");
             var data = await _db.Products
                 .Include(p => p.ProductImages)
                 .Include(p => p.ProductColors)
+                .Include(p => p.TagProduct)            
                 .SingleOrDefaultAsync(p => p.Id == id);
-            //.Include(p => p.ProductColors)
-            //    .ThenInclude(pc => pc.Color)
-            //.Include(p => p.Category)
             if (data == null) return NotFound();
 
 
@@ -184,7 +200,8 @@ namespace Pustok2.ViewModel.ProductVM
                     Id = pi.Id,
                     Url = pi.ImagePath
                 }),
-                CoverImageUrl = data.ImageUrl
+                CoverImageUrl = data.ImageUrl,
+                TagsId = data.TagProduct.Select(i => i.TagId).ToList(),
             };
 
             return View(vm);
@@ -226,7 +243,7 @@ namespace Pustok2.ViewModel.ProductVM
             {
                 ModelState.AddModelError("CostPrice", "Sell price must be bigger than cost price");
             }
-
+            
             if (!vm.ColorIds.Any())
             {
                 ModelState.AddModelError("ColorIds", "You must add at least 1 color");
@@ -237,10 +254,14 @@ namespace Pustok2.ViewModel.ProductVM
                 ViewBag.Categories = _db.Categories;
                 return View(vm);
             }
-
+            if (!vm.TagsId.Any())
+            {
+                ModelState.AddModelError("TagsId", "You must select at least 1 Tag");
+            }
             var data = await _db.Products
                 .Include(p => p.ProductImages)
                 .Include(p => p.ProductColors)
+                .Include(P => P.TagProduct)
                 .SingleOrDefaultAsync(p => p.Id == id);
             data.Name = vm.Name;
             data.About = vm.About ;
@@ -273,10 +294,15 @@ namespace Pustok2.ViewModel.ProductVM
 
                 data.ProductImages.AddRange(imgs);
             }
-
+            // Muqayise Color
             if (!Enumerable.SequenceEqual(data.ProductColors?.Select(p => p.ColorId), vm.ColorIds))
             {
                 data.ProductColors = vm.ColorIds.Select(c => new ProductColor { ColorId = c, ProductId = data.Id }).ToList();
+            }
+            // Muqayise Tag
+            if (!Enumerable.SequenceEqual(data.TagProduct.Select(p => p.TagId), vm.TagsId))
+            {
+                data.TagProduct = vm.TagsId.Select(c => new ProductTag { TagId = c, ProductId = data.Id }).ToList();
             }
             await _db.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
@@ -301,17 +327,25 @@ namespace Pustok2.ViewModel.ProductVM
             return RedirectToAction(nameof(Update), new { id = data.ProductId });
         }
 
-        public async Task<IActionResult>DeleteProduct(int? id)
+        public async Task<IActionResult> DeleteProduct(int? id,ProductListVM vm)
         {
             if (id == null) return BadRequest();
             var data = await _db.Products.FindAsync(id);
             if (data == null) return NotFound();
-            _db.Products.Remove(data);
+            data.IsDeleted = true;
+            await _db.SaveChangesAsync();
+            return RedirectToAction(nameof(Index));
+        }
+        public async Task<IActionResult>RestoreProduct(int? id)
+        {
+            if(id== null) return BadRequest();
+            var data = await _db.Products.FindAsync(id);
+            if (data == null) return NotFound();
+            data.IsDeleted = false;
             await _db.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
-       
        
     }
 }

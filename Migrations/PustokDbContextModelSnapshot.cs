@@ -457,6 +457,34 @@ namespace Pustok2.Migrations
                     b.ToTable("ProductImages");
                 });
 
+            modelBuilder.Entity("Pustok2.Models.ProductTag", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int?>("BlogId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("ProductId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("TagId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("BlogId");
+
+                    b.HasIndex("ProductId");
+
+                    b.HasIndex("TagId");
+
+                    b.ToTable("ProductTags");
+                });
+
             modelBuilder.Entity("Pustok2.Models.Setting", b =>
                 {
                     b.Property<int>("Id")
@@ -692,6 +720,29 @@ namespace Pustok2.Migrations
                     b.Navigation("Product");
                 });
 
+            modelBuilder.Entity("Pustok2.Models.ProductTag", b =>
+                {
+                    b.HasOne("Pustok2.Models.Blog", "Blog")
+                        .WithMany()
+                        .HasForeignKey("BlogId");
+
+                    b.HasOne("Pustok2.Models.Product", null)
+                        .WithMany("TagProduct")
+                        .HasForeignKey("ProductId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Pustok2.Models.Tag", "Tag")
+                        .WithMany("TagProduct")
+                        .HasForeignKey("TagId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Blog");
+
+                    b.Navigation("Tag");
+                });
+
             modelBuilder.Entity("Pustok2.Models.Author", b =>
                 {
                     b.Navigation("Blogs");
@@ -717,11 +768,15 @@ namespace Pustok2.Migrations
                     b.Navigation("ProductColors");
 
                     b.Navigation("ProductImages");
+
+                    b.Navigation("TagProduct");
                 });
 
             modelBuilder.Entity("Pustok2.Models.Tag", b =>
                 {
                     b.Navigation("TagBlog");
+
+                    b.Navigation("TagProduct");
                 });
 #pragma warning restore 612, 618
         }

@@ -36,9 +36,10 @@
                 })
         });
 
-        $("body").on("click", ".cross-btn", function (ev) {
+        $("body").on("click", ".cross-btn a", function (ev) {
             ev.preventDefault();
             $(this).closest('.single-cart-block').remove();
+            alert($(this).attr("href"))
             fetch($(this).attr("href"))
                 .then(res => {
                     if (res.ok) {
@@ -2588,7 +2589,9 @@
             ]'>
                     @foreach(var product in Model.Products)
                     {
-                        <div class="single-slide">
+                        @if (product.IsDeleted == false)
+                        {
+                             <div class="single-slide">
 
                             <div class="product-card">
                                 <div class="product-header">
@@ -2633,6 +2636,7 @@
                                 </div>
                             </div>
                         </div>
+                        }
                     }
                     
                 </div>
@@ -2928,7 +2932,5 @@
     <script src="~/assets/js/ajax-mail.js"></script>
     <script src="~/assets/js/custom.js"></script>
 </body>
-
-
 </html>
 

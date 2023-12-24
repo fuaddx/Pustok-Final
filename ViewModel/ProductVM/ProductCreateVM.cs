@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Pustok2.Models;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Pustok2.ViewModel.ProductVM;
@@ -23,4 +24,7 @@ public class ProductCreateVM
 	public IFormFile? MainImage { get; set; }
     public IFormFile HoverImage { get; set; }
     public IEnumerable<IFormFile>? Images { get; set; }
+    public Tag?  Tag{ get; set; }
+    public IEnumerable<int>? TagsId { get; set; }
+
 }

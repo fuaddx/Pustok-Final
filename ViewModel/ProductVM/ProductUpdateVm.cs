@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Pustok2.Models;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Pustok2.ViewModel.ProductVM
@@ -24,5 +25,7 @@ namespace Pustok2.ViewModel.ProductVM
         public IEnumerable<IFormFile>? Images { get; set; }
         public IEnumerable<ProductImgVm>? ImageUrls { get; set; } = new List<ProductImgVm>();
         public string? CoverImageUrl { get; set; }
+        public Tag? Tag { get; set; }
+        public IEnumerable<int> TagsId { get; set; }
     }
 }

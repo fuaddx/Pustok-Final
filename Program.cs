@@ -50,6 +50,8 @@ internal class Program
 
         builder.Services.AddScoped<IEmailService, EmailService>();
 
+        
+
         builder.Services.AddScoped<LayoutService>();
         var app = builder.Build();
 
@@ -58,6 +60,7 @@ internal class Program
         {
             app.UseExceptionHandler("/Home/Error");
         }
+            
 
         app.UseHttpsRedirection();
 

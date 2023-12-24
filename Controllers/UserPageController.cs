@@ -10,11 +10,14 @@ namespace Pustok2.Controllers
 {
 	public class UserPageController : Controller
 	{
-		PustokDbContext _db { get; }
+        private readonly IWebHostEnvironment env;
+
+        PustokDbContext _db { get; }
 		UserManager<AppUser> _userManager { get; }
-		public UserPageController(PustokDbContext db, UserManager<AppUser> userManager)
+		public UserPageController(IWebHostEnvironment env, PustokDbContext db, UserManager<AppUser> userManager)
 		{
-			_db = db;
+            this.env = env;
+            _db = db;
 			_userManager = userManager;
 		}
 
@@ -32,83 +35,10 @@ namespace Pustok2.Controllers
 				Email = userr.Email,
 				Name = userr.FirstName,
 				Surname = userr.LastName,
-				Password = userr.PasswordHash,
-				ConfirmPassword= userr.PasswordHash,
 				ProfileImageURL = userr.ProfileImageUrl,
 			};
 			return View(UserVm);
 		}
-		/*
-		public IActionResult Index()
-		{
-			return View();
-		}
-		 */
-
-		/*
-		 public async Task<IActionResult> UserPages(string? user)
-		{
-			if (user == null) return BadRequest();
-			var name = User.Identity.Name;
-			if (name == null || name != user) return NotFound();
-			var userr = await _userManager.FindByNameAsync(user);
-			if (userr == null) return NotFound();
-			var UserVm = new UserPageVM
-			{
-				Username = userr.UserName,
-				Email = userr.Email,
-				Name = userr.Fullname,
-				Surname = userr.Fullname,
-				ProfileImageURL = userr.ProfileImageUrl,
-			};
-			return View(UserVm);
-		}
-		 */
-
-		/*
-		 * 		[HttpPost]
-		public async Task<IActionResult> UserPages(string? user , UserPageVM vm)
-		{
-			var userr = await _userManager.FindByNameAsync(user);
-			if (userr == null) return NotFound();
-			if (!ModelState.IsValid)
-			{
-				return View(vm);
-			}
-			if(vm.ProfileImage != null)
-			{
-				if (!vm.ProfileImage.IsCorrectType())
-				{
-					ModelState.AddModelError("ProfileImage", "Wrong File Type");
-				}
-				if(!vm.ProfileImage.IsValidSize(2000)) 
-				{
-					ModelState.AddModelError("ProfileImage", "File cannot larger than");
-				}
-
-				
-			}
-			if (vm.ProfileImage != null)
-			{
-				string filePath = Path.Combine(PathConstants.RootPath, userr.ProfileImageUrl);
-				if (System.IO.File.Exists(filePath))
-				{
-					System.IO.File.Delete(filePath);
-				}
-				// Kohne sekli yaddasdan silmek
-
-				userr.ProfileImageUrl = await vm.ProfileImage.SaveAsync(PathConstants.Product);
-				//Yeni sekli save elemek
-			}
-
-			userr.Fullname = vm.Name + " " + vm.Surname;
-			userr.Email = vm.Email;
-
-			await _userManager.UpdateAsync(userr);
-
-			return RedirectToAction("UserPages","Userpage");
-		}
-		 */
 
 
 		[HttpPost]
@@ -129,27 +59,38 @@ namespace Pustok2.Controllers
 				if(!vm.ProfileImage.IsValidSize(2000)) 
 				{
 					ModelState.AddModelError("ProfileImage", "File cannot larger than");
-				}
-
-				
+				}				
 			}
 			userr.FirstName = vm.Name;
 			userr.LastName = vm.Surname;
+			userr.UserName = vm.Username;
 			userr.Email = vm.Email;
-			userr.PasswordHash = vm.Password;
-			userr.PasswordHash = vm.ConfirmPassword;
-			userr.ProfileImageUrl = vm.ProfileImageURL;
-			if (vm.ProfileImage != null)
+
+			if(vm.CurrentPassword != null && vm.ConfirmPassword == vm.Password)
 			{
-				string filePath = Path.Combine(PathConstants.RootPath, userr.ProfileImageUrl);
+				var pr = await _userManager.ChangePasswordAsync(userr, vm.CurrentPassword, vm.Password);
+			}	
+			
+
+            // user sekil yukleyib yeni
+			// 1 kohneni sil eger varsa
+			// 2 yenisini save ele
+            if (vm.ProfileImage != null) 
+			{
+				// istifadecinin artiq sekli varsa sil
+				if(userr.ProfileImageUrl != null)
+				{
+
+				string filePath = Path.Combine(env.WebRootPath, userr.ProfileImageUrl);
 				if (System.IO.File.Exists(filePath))
 				{
 					System.IO.File.Delete(filePath);
 				}
+				}
+				
 				// Kohne sekli yaddasdan silmek
-
-				userr.ProfileImageUrl = await vm.ProfileImage.SaveAsync(PathConstants.Product);
 				//Yeni sekli save elemek
+				userr.ProfileImageUrl = await vm.ProfileImage.SaveAsync(PathConstants.Users);
 			}
 
 			

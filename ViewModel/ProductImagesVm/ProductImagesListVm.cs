@@ -8,7 +8,7 @@ namespace Pustok2.ViewModel.ProductImagesVm
         public string ImagePath { get; set; }
         public Product Product { get; set; }
 
-        public IFormFile ImageFile { get; set; }
+        /*public IFormFile ImageFile { get; set; }*/
         public bool IsActive { get; set; }
 
 

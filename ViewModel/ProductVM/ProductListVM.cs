@@ -27,5 +27,6 @@ namespace Pustok2.ViewModel.ProductVM
         public bool IsDeleted { get; set; } = false;
 		public IEnumerable<string> ImageUrls { get; set; }
 		public IEnumerable<Color> Colors { get; set; }
-	}
+        public IEnumerable<Tag>? Tags { get; set; }
+    }
 }
